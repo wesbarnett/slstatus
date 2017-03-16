@@ -147,11 +147,11 @@ battery_state(const char *bat)
 	fclose(fp);
 
 	if (strcmp(state, "Charging") == 0) {
-		return smprintf("\U0001F50C");
+        return smprintf("\U0001F50C");
 	} else if (strcmp(state, "Discharging") == 0) {
-		return smprintf("\U0001F50B");
+		return smprintf("\U0001F50B");
 	} else if (strcmp(state, "Full") == 0) {
-		return smprintf("\U0001F50C");
+		return smprintf("\U0001F50C");
 	} else {
 		return smprintf("?");
 	}
@@ -198,7 +198,7 @@ datetime(const char *fmt)
 		return smprintf("%s", UNKNOWN_STR);
 	}
 
-	return smprintf("%s", str);
+	return smprintf("%s", str);
 }
 
 static char *
