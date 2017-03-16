@@ -1,5 +1,5 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 08:04:26.131293193 -0500
+--- b/slstatus.c	2017-03-16 16:51:35.089405686 -0500
 ***************
 *** 112,121 ****
   		warn("Failed to open file %s", path);
@@ -36,7 +36,7 @@
   
   static char *
 ***************
-*** 135,147 ****
+*** 135,145 ****
   	fclose(fp);
   
   	if (strcmp(state, "Charging") == 0) {
@@ -46,24 +46,20 @@
   	} else if (strcmp(state, "Full") == 0) {
 ! 		return smprintf("=");
   	} else {
-! 		return smprintf("?");
+  		return smprintf("?");
   	}
-  }
-  
---- 147,159 ----
+--- 147,157 ----
   	fclose(fp);
   
   	if (strcmp(state, "Charging") == 0) {
-! 		return smprintf("+");
+! 		return smprintf("\U0001F50C");
   	} else if (strcmp(state, "Discharging") == 0) {
-! 		return smprintf("-");
+! 		return smprintf("\U0001F50B");
   	} else if (strcmp(state, "Full") == 0) {
-! 		return smprintf("=");
+! 		return smprintf("\U0001F50C");
   	} else {
-! 		return smprintf("?");
+  		return smprintf("?");
   	}
-  }
-  
 ***************
 *** 683,689 ****
   
@@ -73,21 +69,25 @@
   }
   
   static char *
---- 695,712 ----
+--- 695,716 ----
   
   	close(afd);
   
 !     if (v < 1) 
 !     {
-! 	    return smprintf(" %d%%", v & 0xff);
+! 	    return smprintf("\U0001F507 %d", v & 0xff);
 !     }
-!     else if (v < 10)
+!     else if (v < 30)
 !     {
-! 	    return smprintf(" %d%%", v & 0xff);
+! 	    return smprintf("\U0001F508 %d", v & 0xff);
+!     }
+!     else if (v < 65)
+!     {
+! 	    return smprintf("\U0001F509 %d", v & 0xff);
 !     }
 !     else
 !     {
-! 	    return smprintf("%d%%", v & 0xff);
+! 	    return smprintf("\U0001F50A %d", v & 0xff);
 !     }
   }
   

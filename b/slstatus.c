@@ -147,13 +147,13 @@ battery_state(const char *bat)
 	fclose(fp);
 
 	if (strcmp(state, "Charging") == 0) {
-		return smprintf("+");
+		return smprintf("\U0001F50C");
 	} else if (strcmp(state, "Discharging") == 0) {
-		return smprintf("-");
+		return smprintf("\U0001F50B");
 	} else if (strcmp(state, "Full") == 0) {
-		return smprintf("=");
+		return smprintf("\U0001F50C");
 	} else {
-		return smprintf("?");
+		return smprintf("?");
 	}
 }
 
@@ -697,15 +697,19 @@ vol_perc(const char *card)
 
     if (v < 1) 
     {
-	    return smprintf(" %d%%", v & 0xff);
+	    return smprintf("\U0001F507 %d", v & 0xff);
     }
-    else if (v < 10)
+    else if (v < 30)
     {
-	    return smprintf(" %d%%", v & 0xff);
+	    return smprintf("\U0001F508 %d", v & 0xff);
+    }
+    else if (v < 65)
+    {
+	    return smprintf("\U0001F509 %d", v & 0xff);
     }
     else
     {
-	    return smprintf("%d%%", v & 0xff);
+	    return smprintf("\U0001F50A %d", v & 0xff);
     }
 }
 
