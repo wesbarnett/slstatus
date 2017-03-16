@@ -112,21 +112,22 @@ battery_perc(const char *bat)
 		warn("Failed to open file %s", path);
 		return smprintf("%s", UNKNOWN_STR);
 	}
-    if (perc < battery_low)
+    fscanf(fp, "%i", &perc);
+	fclose(fp);
+
+    if (perc <= battery_urgent)
     {
-        fscanf(fp, "%i", &perc);
+	    return smprintf("%d%%", perc);
     }
-    if (perc < battery_urgent)
+    else if (perc <= battery_low)
     {
-        fscanf(fp, "%i", &perc);
+	    return smprintf("%d%%", perc);
     }
     else
     {
-        fscanf(fp, "%i", &perc);
+  	    return smprintf("%d%%", perc);
     }
-	fclose(fp);
 
-	return smprintf("%d%%", perc);
 }
 
 static char *
@@ -146,13 +147,13 @@ battery_state(const char *bat)
 	fclose(fp);
 
 	if (strcmp(state, "Charging") == 0) {
-		return smprintf("+");
+		return smprintf("+");
 	} else if (strcmp(state, "Discharging") == 0) {
 		return smprintf("-");
 	} else if (strcmp(state, "Full") == 0) {
-		return smprintf("=");
+		return smprintf("=");
 	} else {
-		return smprintf("?");
+		return smprintf("?");
 	}
 }
 
@@ -696,11 +697,15 @@ vol_perc(const char *card)
 
     if (v < 1) 
     {
-	    return smprintf("%d%%", v & 0xff);
+	    return smprintf(" %d%%", v & 0xff);
+    }
+    else if (v < 10)
+    {
+	    return smprintf(" %d%%", v & 0xff);
     }
     else
     {
-	    return smprintf("%d%%", v & 0xff);
+	    return smprintf("%d%%", v & 0xff);
     }
 }
 
