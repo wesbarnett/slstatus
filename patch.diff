@@ -1,5 +1,5 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 16:51:35.089405686 -0500
+--- b/slstatus.c	2017-03-16 17:06:46.006555786 -0500
 ***************
 *** 112,121 ****
   		warn("Failed to open file %s", path);
@@ -29,7 +29,7 @@
 !     }
 !     else
 !     {
-!   	    return smprintf("%d%%", perc);
+!   	    return smprintf("%d%%", perc);
 !     }
 ! 
   }
@@ -69,25 +69,53 @@
   }
   
   static char *
---- 695,716 ----
+--- 695,720 ----
   
   	close(afd);
   
 !     if (v < 1) 
 !     {
-! 	    return smprintf("\U0001F507 %d", v & 0xff);
+! 	    return smprintf("\U0001F507  %d%%", v & 0xff);
+!     }
+!     else if (v < 10)
+!     {
+! 	    return smprintf("\U0001F508  %d%%", v & 0xff);
 !     }
 !     else if (v < 30)
 !     {
-! 	    return smprintf("\U0001F508 %d", v & 0xff);
+! 	    return smprintf("\U0001F508 %d%%", v & 0xff);
 !     }
 !     else if (v < 65)
 !     {
-! 	    return smprintf("\U0001F509 %d", v & 0xff);
+! 	    return smprintf("\U0001F509 %d%%", v & 0xff);
 !     }
 !     else
 !     {
-! 	    return smprintf("\U0001F50A %d", v & 0xff);
+! 	    return smprintf("\U0001F50A %d%%", v & 0xff);
+!     }
+  }
+  
+  static char *
+***************
+*** 725,731 ****
+  	datastart = (datastart+(strlen(iface)+1));
+  	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
+  
+! 	return smprintf("%d%%", perc);
+  }
+  
+  static char *
+--- 756,769 ----
+  	datastart = (datastart+(strlen(iface)+1));
+  	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
+  
+!     if (perc < wifi_low)
+!     {
+! 	    return smprintf("%d%%", perc);
+!     }
+!     else
+!     {
+! 	    return smprintf("%d%%", perc);
 !     }
   }
   

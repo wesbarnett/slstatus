@@ -125,7 +125,7 @@ battery_perc(const char *bat)
     }
     else
     {
-  	    return smprintf("%d%%", perc);
+  	    return smprintf("%d%%", perc);
     }
 
 }
@@ -697,19 +697,23 @@ vol_perc(const char *card)
 
     if (v < 1) 
     {
-	    return smprintf("\U0001F507 %d", v & 0xff);
+	    return smprintf("\U0001F507  %d%%", v & 0xff);
+    }
+    else if (v < 10)
+    {
+	    return smprintf("\U0001F508  %d%%", v & 0xff);
     }
     else if (v < 30)
     {
-	    return smprintf("\U0001F508 %d", v & 0xff);
+	    return smprintf("\U0001F508 %d%%", v & 0xff);
     }
     else if (v < 65)
     {
-	    return smprintf("\U0001F509 %d", v & 0xff);
+	    return smprintf("\U0001F509 %d%%", v & 0xff);
     }
     else
     {
-	    return smprintf("\U0001F50A %d", v & 0xff);
+	    return smprintf("\U0001F50A %d%%", v & 0xff);
     }
 }
 
@@ -752,7 +756,14 @@ wifi_perc(const char *iface)
 	datastart = (datastart+(strlen(iface)+1));
 	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
 
-	return smprintf("%d%%", perc);
+    if (perc < wifi_low)
+    {
+	    return smprintf("%d%%", perc);
+    }
+    else
+    {
+	    return smprintf("%d%%", perc);
+    }
 }
 
 static char *

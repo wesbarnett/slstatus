@@ -41,14 +41,15 @@
 
 const int battery_low = 15;
 const int battery_urgent = 5;
+const int wifi_low = 20;
 
 static const struct arg args[] = {
 	/* function	format        argument */
-    { battery_state, "%s", "BAT0" },
-    { battery_perc, "%s", "BAT0" },
-    { vol_perc, "%s ", "/dev/mixer1" }, 
-    { wifi_essid, "| %s ", "wlp1s0" }, 
-    { wifi_perc, "(%s) ", "wlp1s0" }, 
-	{ datetime, "| %s ", "%a %d %b %Y %H:%M" },
-    { username, "[%s]", NULL},
+    { wifi_essid, "%s", "wlp1s0" }, 
+    { wifi_perc, "%s", "wlp1s0" }, 
+    { battery_state, "%s", "BAT0" },
+    { battery_perc, "%s", "BAT0" },
+    { vol_perc, "%s", "/dev/mixer1" }, 
+	{ datetime, "%s", "%a %d %b %Y %H:%M" },
+    { username, "%s", NULL},
 };

@@ -10,8 +10,8 @@ source=(git+https://github.com/drkhsh/slstatus.git
     patch.diff
 	config.h)
 md5sums=('SKIP'
-         'c0d6336b09b65f4e55e2ffdaa3a45a5a'
-         '2f643fd4d3f3e87229cc6aaa9156453f')
+         '76062de28d9782c64c823b2a906b7aa2'
+         'e9f3281cd49d6a772196f5ef6f8224ad')
 
 pkgver(){
   cd $srcdir/$pkgname
