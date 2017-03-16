@@ -7,8 +7,10 @@ arch=('i686' 'x86_64')
 license=('custom')
 depends=('dwm')
 source=(git+https://github.com/drkhsh/slstatus.git
+    patch.diff
 	config.h)
 md5sums=('SKIP'
+         'SKIP'
          'SKIP')
 
 pkgver(){
@@ -19,6 +21,7 @@ pkgver(){
 prepare() {
   cd $srcdir/$pkgname
   cp $srcdir/config.h config.h
+  patch -Np1 <"$srcdir/patch.diff"
 }
 
 build() {

@@ -38,9 +38,12 @@
 - vol_perc (oss/alsa volume status (see README)) [argument: /dev/mixer]
 - wifi_perc (wifi signal in percent) [argument: wifi card interface name]
 - wifi_essid (wifi essid) [argument: wifi card interface name] */
+
+const int battery_low = 15;
+
 static const struct arg args[] = {
 	/* function	format        argument */
-    { battery_state, "%s", "BAT0" },
+    { battery_state, "%s ", "BAT0" },
     { battery_perc, "%s ", "BAT0" },
     { wifi_essid, "| %s ", "wlp1s0" }, 
     { wifi_perc, "(%s) ", "wlp1s0" }, 
