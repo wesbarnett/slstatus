@@ -50,4 +50,5 @@ static const struct arg args[] = {
     { wifi_perc, "(%s) ", "wlp1s0" }, 
     { vol_perc, "|%s", "/dev/mixer1" }, 
 	{ datetime, "| %s ", "%a %d %b %Y %H:%M" },
+    { username, "[%s]", NULL},
 };

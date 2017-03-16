@@ -11,7 +11,7 @@ source=(git+https://github.com/drkhsh/slstatus.git
 	config.h)
 md5sums=('SKIP'
          '9a4608ee0152790b9b73c34378ad46d4'
-         '1d6f67443b53f5ff735480b3f36cd9e6')
+         'd224609fef1843c2912547481b530a66')
 
 pkgver(){
   cd $srcdir/$pkgname
