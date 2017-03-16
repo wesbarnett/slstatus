@@ -40,6 +40,7 @@
 - wifi_essid (wifi essid) [argument: wifi card interface name] */
 
 const int battery_low = 15;
+const int battery_urgent = 5;
 
 static const struct arg args[] = {
 	/* function	format        argument */

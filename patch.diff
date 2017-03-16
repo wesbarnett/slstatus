@@ -1,5 +1,5 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 07:42:11.692482815 -0500
+--- b/slstatus.c	2017-03-16 07:46:10.224048538 -0500
 ***************
 *** 112,118 ****
   		warn("Failed to open file %s", path);
@@ -9,11 +9,15 @@
   	fclose(fp);
   
   	return smprintf("%d%%", perc);
---- 112,125 ----
+--- 112,129 ----
   		warn("Failed to open file %s", path);
   		return smprintf("%s", UNKNOWN_STR);
   	}
-!     if (&perc < battery_low)
+!     if (perc < battery_low)
+!     {
+!         fscanf(fp, "%i", &perc);
+!     }
+!     if (perc < battery_urgent)
 !     {
 !         fscanf(fp, "%i", &perc);
 !     }
@@ -33,7 +37,7 @@
   }
   
   static char *
---- 690,703 ----
+--- 694,707 ----
   
   	close(afd);
   

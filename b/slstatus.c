@@ -112,7 +112,11 @@ battery_perc(const char *bat)
 		warn("Failed to open file %s", path);
 		return smprintf("%s", UNKNOWN_STR);
 	}
-    if (&perc < battery_low)
+    if (perc < battery_low)
+    {
+        fscanf(fp, "%i", &perc);
+    }
+    if (perc < battery_urgent)
     {
         fscanf(fp, "%i", &perc);
     }
