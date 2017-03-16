@@ -1,5 +1,5 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 07:46:10.224048538 -0500
+--- b/slstatus.c	2017-03-16 07:48:11.837240309 -0500
 ***************
 *** 112,118 ****
   		warn("Failed to open file %s", path);
@@ -28,6 +28,23 @@
   	fclose(fp);
   
   	return smprintf("%d%%", perc);
+***************
+*** 137,143 ****
+  	if (strcmp(state, "Charging") == 0) {
+  		return smprintf("+");
+  	} else if (strcmp(state, "Discharging") == 0) {
+! 		return smprintf("-");
+  	} else if (strcmp(state, "Full") == 0) {
+  		return smprintf("=");
+  	} else {
+--- 148,154 ----
+  	if (strcmp(state, "Charging") == 0) {
+  		return smprintf("+");
+  	} else if (strcmp(state, "Discharging") == 0) {
+! 		return smprintf("-");
+  	} else if (strcmp(state, "Full") == 0) {
+  		return smprintf("=");
+  	} else {
 ***************
 *** 683,689 ****
   

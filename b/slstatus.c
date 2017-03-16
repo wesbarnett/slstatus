@@ -148,7 +148,7 @@ battery_state(const char *bat)
 	if (strcmp(state, "Charging") == 0) {
 		return smprintf("+");
 	} else if (strcmp(state, "Discharging") == 0) {
-		return smprintf("-");
+		return smprintf("-");
 	} else if (strcmp(state, "Full") == 0) {
 		return smprintf("=");
 	} else {
