@@ -1,7 +1,16 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 18:20:05.503252864 -0500
+--- b/slstatus.c	2017-03-16 19:42:24.337348057 -0500
 ***************
-*** 112,121 ****
+*** 103,121 ****
+  battery_perc(const char *bat)
+  {
+  	int perc;
+  	char path[PATH_MAX];
+  	FILE *fp;
+  
+! 	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/capacity");
+  	fp = fopen(path, "r");
+  	if (fp == NULL) {
   		warn("Failed to open file %s", path);
   		return smprintf("%s", UNKNOWN_STR);
   	}
@@ -12,13 +21,35 @@
   }
   
   static char *
---- 112,133 ----
+--- 103,146 ----
+  battery_perc(const char *bat)
+  {
+  	int perc;
++     int charge_now;
++     int charge_full_design;
+  	char path[PATH_MAX];
+  	FILE *fp;
+  
+! 	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_full_design");
+  	fp = fopen(path, "r");
+  	if (fp == NULL) {
   		warn("Failed to open file %s", path);
   		return smprintf("%s", UNKNOWN_STR);
   	}
-!     fscanf(fp, "%i", &perc);
+!     fscanf(fp, "%i", &charge_full_design);
   	fclose(fp);
   
+! 	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_now");
+! 	fp = fopen(path, "r");
+! 	if (fp == NULL) {
+! 		warn("Failed to open file %s", path);
+! 		return smprintf("%s", UNKNOWN_STR);
+! 	}
+!     fscanf(fp, "%i", &charge_now);
+! 	fclose(fp);
+! 
+!     perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
+! 
 !     if (perc <= battery_urgent)
 !     {
 ! 	    return smprintf("%d%%", perc);
@@ -48,7 +79,7 @@
   	} else {
   		return smprintf("?");
   	}
---- 147,157 ----
+--- 160,170 ----
   	fclose(fp);
   
   	if (strcmp(state, "Charging") == 0) {
@@ -56,7 +87,7 @@
   	} else if (strcmp(state, "Discharging") == 0) {
 ! 		return smprintf("\U0001F50B");
   	} else if (strcmp(state, "Full") == 0) {
-! 		return smprintf("\U0001F50C");
+! 		return smprintf("F");
   	} else {
   		return smprintf("?");
   	}
@@ -69,7 +100,7 @@
   }
   
   static char *
---- 198,204 ----
+--- 211,217 ----
   		return smprintf("%s", UNKNOWN_STR);
   	}
   
@@ -86,7 +117,7 @@
   }
   
   static char *
---- 695,720 ----
+--- 708,733 ----
   
   	close(afd);
   
@@ -122,7 +153,7 @@
   }
   
   static char *
---- 756,769 ----
+--- 769,782 ----
   	datastart = (datastart+(strlen(iface)+1));
   	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
   

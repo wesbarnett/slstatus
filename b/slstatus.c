@@ -103,17 +103,30 @@ static char *
 battery_perc(const char *bat)
 {
 	int perc;
+    int charge_now;
+    int charge_full_design;
 	char path[PATH_MAX];
 	FILE *fp;
 
-	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/capacity");
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_full_design");
 	fp = fopen(path, "r");
 	if (fp == NULL) {
 		warn("Failed to open file %s", path);
 		return smprintf("%s", UNKNOWN_STR);
 	}
-    fscanf(fp, "%i", &perc);
+    fscanf(fp, "%i", &charge_full_design);
 	fclose(fp);
+
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_now");
+	fp = fopen(path, "r");
+	if (fp == NULL) {
+		warn("Failed to open file %s", path);
+		return smprintf("%s", UNKNOWN_STR);
+	}
+    fscanf(fp, "%i", &charge_now);
+	fclose(fp);
+
+    perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
 
     if (perc <= battery_urgent)
     {
@@ -151,7 +164,7 @@ battery_state(const char *bat)
 	} else if (strcmp(state, "Discharging") == 0) {
 		return smprintf("\U0001F50B");
 	} else if (strcmp(state, "Full") == 0) {
-		return smprintf("\U0001F50C");
+		return smprintf("F");
 	} else {
 		return smprintf("?");
 	}
