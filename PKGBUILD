@@ -10,7 +10,7 @@ source=(git+https://github.com/drkhsh/slstatus.git
     patch.diff
 	config.h)
 md5sums=('SKIP'
-         '96ccddf82e171e168568a160fa56325b'
+         '8626220460dfc64ebf919c7d14f722ef'
          'b02a66364f44a5ce863dd3f7c76e74f6')
 
 pkgver(){

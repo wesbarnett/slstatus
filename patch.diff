@@ -1,5 +1,5 @@
 *** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-16 19:42:24.337348057 -0500
+--- b/slstatus.c	2017-03-18 07:56:54.732303020 -0500
 ***************
 *** 103,121 ****
   battery_perc(const char *bat)
@@ -121,19 +121,19 @@
   
   	close(afd);
   
-!     if (v < 1) 
+!     if ((v & 0xff) < 1) 
 !     {
-! 	    return smprintf("\U0001F507  %d%%", v & 0xff);
+! 	    return smprintf("\U0001F507  %d%%", v & 0xff);
 !     }
-!     else if (v < 10)
+!     else if ((v & 0xff) < 10)
 !     {
 ! 	    return smprintf("\U0001F508  %d%%", v & 0xff);
 !     }
-!     else if (v < 30)
+!     else if ((v & 0xff) < 30)
 !     {
 ! 	    return smprintf("\U0001F508 %d%%", v & 0xff);
 !     }
-!     else if (v < 65)
+!     else if ((v & 0xff) < 65)
 !     {
 ! 	    return smprintf("\U0001F509 %d%%", v & 0xff);
 !     }

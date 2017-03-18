@@ -708,19 +708,19 @@ vol_perc(const char *card)
 
 	close(afd);
 
-    if (v < 1) 
+    if ((v & 0xff) < 1) 
     {
-	    return smprintf("\U0001F507  %d%%", v & 0xff);
+	    return smprintf("\U0001F507  %d%%", v & 0xff);
     }
-    else if (v < 10)
+    else if ((v & 0xff) < 10)
     {
 	    return smprintf("\U0001F508  %d%%", v & 0xff);
     }
-    else if (v < 30)
+    else if ((v & 0xff) < 30)
     {
 	    return smprintf("\U0001F508 %d%%", v & 0xff);
     }
-    else if (v < 65)
+    else if ((v & 0xff) < 65)
     {
 	    return smprintf("\U0001F509 %d%%", v & 0xff);
     }
