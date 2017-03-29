@@ -63,6 +63,7 @@ static char *uid(void);
 static char *uptime(void);
 static char *username(void);
 static char *vol_perc(const char *card);
+static char *vpn_status(const char *iface);
 static char *wifi_perc(const char *iface);
 static char *wifi_essid(const char *iface);
 static void sighandler(const int signo);
@@ -728,6 +729,24 @@ vol_perc(const char *card)
     {
 	    return smprintf("\U0001F50A %d%%", v & 0xff);
     }
+}
+
+static char *
+vpn_status(const char *iface)
+{
+	char path[PATH_MAX];
+	char status[5];
+	FILE *fp;
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/net/", iface, "/operstate");
+	fp = fopen(path, "r");
+	if (fp == NULL) {
+		return smprintf("\U0001F513");
+	}
+	fgets(status, 5, fp);
+	fclose(fp);
+	if(strcmp(status, "down\n") != 0) {
+		return smprintf("\U0001F512");
+	}
 }
 
 static char *

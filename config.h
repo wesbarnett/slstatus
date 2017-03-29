@@ -45,6 +45,7 @@ const int wifi_low = 20;
 
 static const struct arg args[] = {
 	/* function	format        argument */
+    { vpn_status, "%s ", "tun0" }, 
     { wifi_essid, "%s", "wlp1s0" }, 
     { wifi_perc, "%s", "wlp1s0" }, 
     { battery_state, "%s", "BAT0" },
