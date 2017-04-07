@@ -1,5 +1,5 @@
-*** a/slstatus.c	2017-03-16 07:38:28.050112122 -0500
---- b/slstatus.c	2017-03-28 21:35:27.094972748 -0500
+*** a/slstatus.c	2017-04-07 08:20:23.755220179 -0500
+--- b/slstatus.c	2017-04-07 08:10:46.159390544 -0500
 ***************
 *** 63,68 ****
 --- 63,69 ----
@@ -77,7 +77,7 @@
   
   static char *
 ***************
-*** 135,145 ****
+*** 135,147 ****
   	fclose(fp);
   
   	if (strcmp(state, "Charging") == 0) {
@@ -86,6 +86,8 @@
 ! 		return smprintf("-");
   	} else if (strcmp(state, "Full") == 0) {
 ! 		return smprintf("=");
+! 	} else if (strcmp(state, "Unknown") == 0) {
+! 		return smprintf("/");
   	} else {
   		return smprintf("?");
   	}
@@ -102,7 +104,7 @@
   		return smprintf("?");
   	}
 ***************
-*** 186,192 ****
+*** 188,194 ****
   		return smprintf("%s", UNKNOWN_STR);
   	}
   
@@ -119,7 +121,96 @@
   
   static char *
 ***************
-*** 683,689 ****
+*** 447,455 ****
+  		warn("Failed to get command output for %s", cmd);
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	fgets(buf, sizeof(buf) - 1, fp);
+  	pclose(fp);
+! 	buf[sizeof(buf) - 1] = '\0';
+  
+  	if ((nlptr = strstr(buf, "\n")) != NULL) {
+  		nlptr[0] = '\0';
+--- 471,479 ----
+  		warn("Failed to get command output for %s", cmd);
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	fgets(buf, sizeof(buf), fp);
+  	pclose(fp);
+! 	buf[sizeof(buf)] = '\0';
+  
+  	if ((nlptr = strstr(buf, "\n")) != NULL) {
+  		nlptr[0] = '\0';
+***************
+*** 473,479 ****
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+  
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf) - 1, fp)) == 0) {
+  		warn("swap_free: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+--- 497,503 ----
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+  
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf), fp)) == 0) {
+  		warn("swap_free: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+***************
+*** 510,516 ****
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+  
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf) - 1, fp)) == 0) {
+  		warn("swap_perc: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+--- 534,540 ----
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+  
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf), fp)) == 0) {
+  		warn("swap_perc: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+***************
+*** 551,557 ****
+  		warn("Failed to open file /proc/meminfo");
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf) - 1, fp)) == 0) {
+  		warn("swap_total: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+--- 575,581 ----
+  		warn("Failed to open file /proc/meminfo");
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf), fp)) == 0) {
+  		warn("swap_total: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+***************
+*** 582,588 ****
+  		warn("Failed to open file /proc/meminfo");
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf) - 1, fp)) == 0) {
+  		warn("swap_used: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+--- 606,612 ----
+  		warn("Failed to open file /proc/meminfo");
+  		return smprintf("%s", UNKNOWN_STR);
+  	}
+! 	if ((bytes_read = fread(buf, sizeof(char), sizeof(buf), fp)) == 0) {
+  		warn("swap_used: read error");
+  		fclose(fp);
+  		return smprintf("%s", UNKNOWN_STR);
+***************
+*** 685,691 ****
   
   	close(afd);
   
@@ -173,7 +264,7 @@
   
   static char *
 ***************
-*** 725,731 ****
+*** 727,733 ****
   	datastart = (datastart+(strlen(iface)+1));
   	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
   
