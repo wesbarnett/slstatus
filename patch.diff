@@ -1,4 +1,4 @@
-*** a/slstatus.c	2017-04-07 08:20:23.755220179 -0500
+*** a/slstatus.c	2017-04-26 09:11:22.938588258 -0500
 --- b/slstatus.c	2017-04-07 08:10:46.159390544 -0500
 ***************
 *** 63,68 ****
@@ -121,26 +121,26 @@
   
   static char *
 ***************
-*** 447,455 ****
-  		warn("Failed to get command output for %s", cmd);
-  		return smprintf("%s", UNKNOWN_STR);
+*** 449,457 ****
   	}
-! 	fgets(buf, sizeof(buf) - 1, fp);
+  	fgets(buf, sizeof(buf), fp);
   	pclose(fp);
 ! 	buf[sizeof(buf) - 1] = '\0';
   
-  	if ((nlptr = strstr(buf, "\n")) != NULL) {
+! 	if ((nlptr = strrchr(buf, '\n')) != NULL) {
   		nlptr[0] = '\0';
---- 471,479 ----
-  		warn("Failed to get command output for %s", cmd);
-  		return smprintf("%s", UNKNOWN_STR);
   	}
-! 	fgets(buf, sizeof(buf), fp);
+  
+--- 473,481 ----
+  	}
+  	fgets(buf, sizeof(buf), fp);
   	pclose(fp);
 ! 	buf[sizeof(buf)] = '\0';
   
-  	if ((nlptr = strstr(buf, "\n")) != NULL) {
+! 	if ((nlptr = strstr(buf, "\n")) != NULL) {
   		nlptr[0] = '\0';
+  	}
+  
 ***************
 *** 473,479 ****
   		return smprintf("%s", UNKNOWN_STR);
@@ -210,7 +210,48 @@
   		fclose(fp);
   		return smprintf("%s", UNKNOWN_STR);
 ***************
-*** 685,691 ****
+*** 643,649 ****
+  static char *
+  username(void)
+  {
+! 	struct passwd *pw = getpwuid(geteuid());
+  
+  	if (pw == NULL) {
+  		warn("Failed to get username");
+--- 667,674 ----
+  static char *
+  username(void)
+  {
+! 	uid_t uid = geteuid();
+! 	struct passwd *pw = getpwuid(uid);
+  
+  	if (pw == NULL) {
+  		warn("Failed to get username");
+***************
+*** 667,696 ****
+  	int v, afd, devmask;
+  	char *vnames[] = SOUND_DEVICE_NAMES;
+  
+! 	afd = open(card, O_RDONLY | O_NONBLOCK);
+! 	if (afd == -1) {
+  		warn("Cannot open %s", card);
+  		return smprintf(UNKNOWN_STR);
+  	}
+  
+! 	if (ioctl(afd, SOUND_MIXER_READ_DEVMASK, &devmask) == -1) {
+! 		warn("Cannot get volume for %s", card);
+! 		close(afd);
+! 		return smprintf("%s", UNKNOWN_STR);
+! 	}
+  	for (i = 0; i < (sizeof(vnames) / sizeof((vnames[0]))); i++) {
+! 		if (devmask & (1 << i) && !strcmp("vol", vnames[i])) {
+! 			if (ioctl(afd, MIXER_READ(i), &v) == -1) {
+! 				warn("vol_perc: ioctl");
+! 				close(afd);
+! 				return smprintf("%s", UNKNOWN_STR);
+  			}
+  		}
+  	}
   
   	close(afd);
   
@@ -218,7 +259,24 @@
   }
   
   static char *
---- 709,752 ----
+--- 692,752 ----
+  	int v, afd, devmask;
+  	char *vnames[] = SOUND_DEVICE_NAMES;
+  
+! 	afd = open(card, O_RDONLY);
+! 	if (afd < 0) {
+  		warn("Cannot open %s", card);
+  		return smprintf(UNKNOWN_STR);
+  	}
+  
+! 	ioctl(afd, MIXER_READ(SOUND_MIXER_DEVMASK), &devmask);
+  	for (i = 0; i < (sizeof(vnames) / sizeof((vnames[0]))); i++) {
+! 		if (devmask & (1 << i)) {
+! 			if (!strcmp("vol", vnames[i])) {
+! 				ioctl(afd, MIXER_READ(i), &v);
+  			}
+  		}
+  	}
   
   	close(afd);
   
@@ -264,7 +322,7 @@
   
   static char *
 ***************
-*** 727,733 ****
+*** 732,738 ****
   	datastart = (datastart+(strlen(iface)+1));
   	sscanf(datastart + 1, " %*d   %d  %*d  %*d		  %*d	   %*d		%*d		 %*d	  %*d		 %*d", &perc);
   

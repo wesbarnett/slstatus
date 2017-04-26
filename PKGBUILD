@@ -1,5 +1,5 @@
 pkgname=slstatus
-pkgver=1289bdb
+pkgver=ac1a57e
 pkgrel=1
 pkgdesc="a suckless and lightweight status monitor for window managers which use WM_NAME as statusbar"
 url="https://github.com/drkhsh/slstatus"
@@ -10,7 +10,7 @@ source=(git+https://github.com/drkhsh/slstatus.git
     patch.diff
 	config.h)
 md5sums=('SKIP'
-         'b519b19e900a09ad899b12cbd7655df0'
+         '9e286e804a608db4c93f4cfde401f383'
          '998aafdc42b897e589314115783f3d51')
 
 pkgver(){
