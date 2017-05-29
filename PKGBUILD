@@ -1,11 +1,12 @@
 pkgname=slstatus
-pkgver=ac1a57e
+pkgver=870d68d
 pkgrel=1
 pkgdesc="a suckless and lightweight status monitor for window managers which use WM_NAME as statusbar"
 url="https://github.com/drkhsh/slstatus"
 arch=('i686' 'x86_64')
 license=('custom')
 depends=('dwm')
+makedepends=('git')
 source=(git+https://github.com/drkhsh/slstatus.git
     patch.diff
 	config.h)
@@ -15,7 +16,7 @@ md5sums=('SKIP'
 
 pkgver(){
   cd $srcdir/$pkgname
-  git rev-parse --short HEAD
+  git describe --always
 }
 
 prepare() {
