@@ -24,7 +24,8 @@ COM =\
 	components/uptime\
 	components/user\
 	components/volume\
-	components/wifi
+	components/wifi\
+	components/vpn
 
 all: slstatus
 

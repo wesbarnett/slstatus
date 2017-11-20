@@ -73,3 +73,6 @@ const char *vol_perc(const char *);
 /* wifi */
 const char *wifi_perc(const char *);
 const char *wifi_essid(const char *);
+
+/* vpn */
+const char *vpn_status(const char *);
