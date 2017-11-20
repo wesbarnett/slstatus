@@ -40,18 +40,18 @@ vol_perc(const char *card)
 	close(afd);
 
     if ((v & 0xff) < 1)  {
-	    return bprintf("\U0001F507 %d", v & 0xff);
+	    return bprintf("\U0001F507 %3d", v & 0xff);
     }
     else if ((v & 0xff) < 10) {
-	    return bprintf("\U0001F508 %d", v & 0xff);
+	    return bprintf("\U0001F508 %3d", v & 0xff);
     }
     else if ((v & 0xff) < 30) {
-	    return bprintf("\U0001F508 %d", v & 0xff);
+	    return bprintf("\U0001F508 %3d", v & 0xff);
     }
     else if ((v & 0xff) < 65) {
-	    return bprintf("\U0001F509 %d", v & 0xff);
+	    return bprintf("\U0001F509 %3d", v & 0xff);
     }
     else {
-	    return bprintf("\U0001F50A %d", v & 0xff);
+	    return bprintf("\U0001F50A %3d", v & 0xff);
     }
 }

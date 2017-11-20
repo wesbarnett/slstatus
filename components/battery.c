@@ -6,6 +6,9 @@
 
 #include "../util.h"
 
+const int battery_urgent = 10;
+const int battery_low = 25;
+
 const char *
 battery_perc(const char *bat)
 {
@@ -35,7 +38,42 @@ battery_perc(const char *bat)
 
     perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
 
-    return bprintf("%d", perc);
+	struct {
+		char *state;
+		char *symbol;
+	} map[] = {
+		{ "Charging",    "\U0001F50C" },
+		{ "Discharging", "\U0001F50B" },
+		{ "Full",        "F" },
+		{ "Unknown",     "?" },
+	};
+
+	size_t i;
+	char state[12];
+
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/status");
+	if (pscanf(path, "%12s", state) != 1) {
+		return NULL;
+	}
+
+	for (i = 0; i < LEN(map); i++) {
+		if (!strcmp(map[i].state, state)) {
+			break;
+		}
+    }
+
+    if (perc <= battery_urgent)
+    {
+	    return bprintf("%c%s%3d%%%c", 0x04, map[i].symbol, perc, 0x01);
+    }
+    else if (perc <= battery_low)
+    {
+	    return bprintf("%c%s%3d%%%c", 0x03, map[i].symbol, perc, 0x01);
+    }
+    else
+    {
+  	    return bprintf("%s%3d%%", map[i].symbol, perc);
+    }
 }
 
 const char *
