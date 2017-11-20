@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <err.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,12 +9,33 @@
 const char *
 battery_perc(const char *bat)
 {
-	int perc;
+	int charge_full_design;
+	int charge_now;
+    int perc;
 	char path[PATH_MAX];
+	FILE *fp;
 
-	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/capacity");
-	return (pscanf(path, "%i", &perc) == 1) ?
-	       bprintf("%d", perc) : NULL;
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_full_design");
+	fp = fopen(path, "r");
+	if (fp == NULL) {
+		warn("Failed to open file %s", path);
+        return NULL;
+	}
+    fscanf(fp, "%i", &charge_full_design);
+	fclose(fp);
+
+	snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_now");
+	fp = fopen(path, "r");
+	if (fp == NULL) {
+		warn("Failed to open file %s", path);
+        return NULL;
+	}
+    fscanf(fp, "%i", &charge_now);
+	fclose(fp);
+
+    perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
+
+    return bprintf("%d", perc);
 }
 
 const char *
