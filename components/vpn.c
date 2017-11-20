@@ -22,16 +22,16 @@ vpn_status(const char *iface)
 
 	fp = fopen(path, "r");
 	if (fp == NULL) {
-		return "down";
+		return "\U0001F513";
 	}
 	fgets(status, 5, fp);
 	fclose(fp);
 
 	if(strcmp(status, "down") == 0) {
-		return "down";
+		return "\U0001F513";
 	}
     else {
-		return "up";
+		return "\U0001F512";
     }
 
 }
