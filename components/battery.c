@@ -34,10 +34,10 @@ battery_state(const char *bat)
 		char *state;
 		char *symbol;
 	} map[] = {
-		{ "Charging",    "+" },
-		{ "Discharging", "-" },
-		{ "Full",        "=" },
-		{ "Unknown",     "/" },
+		{ "Charging",    "\U0001F50C" },
+		{ "Discharging", "\U0001F50B" },
+		{ "Full",        "F" },
+		{ "Unknown",     "?" },
 	};
 	size_t i;
 	char path[PATH_MAX], state[12];
