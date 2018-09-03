@@ -76,3 +76,6 @@ const char *wifi_essid(const char *);
 
 /* vpn */
 const char *vpn_status(const char *);
+
+/* mail */
+const char *mail_status(const char *);
