@@ -112,13 +112,13 @@ battery_perc(const char *bat) {
     }
 
     if (perc <= battery_urgent) {
-        return bprintf("%c  %s%3d%%  %c", 0x04, map[i].symbol, perc, 0x01);
+        return bprintf("%c%s%3d%%%c", 0x04, map[i].symbol, perc, 0x01);
     }
     else if (perc <= battery_low) {
-        return bprintf("%c  %s%3d%%  %c", 0x03, map[i].symbol, perc, 0x01);
+        return bprintf("%c%s%3d%%%c", 0x03, map[i].symbol, perc, 0x01);
     }
     else {
-        return bprintf("  %s%3d%%  ", map[i].symbol, perc);
+        return bprintf("%s%3d%%", map[i].symbol, perc);
     }
 }
 
@@ -134,6 +134,12 @@ datetime(const char *fmt)
     }
 
     return buf;
+}
+
+const char *
+gap(const char *str)
+{
+    return str;
 }
 
 const char *
@@ -242,11 +248,11 @@ vpn_status(const char *iface)
     fclose(fp);
 
     if(strcmp(status, "down") == 0) {
-            return "\U0001F513";
+        return "\U0001F513";
     }
-        else {
-            return "\U0001F512";
-        }
+    else {
+        return "\U0001F512";
+    }
 }
 
 const char *
