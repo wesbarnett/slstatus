@@ -82,13 +82,13 @@ const int battery_low = 25;
         }
 
         if (perc <= battery_urgent) {
-            return bprintf("%c%s%3d%%%c", 0x04, map[i].symbol, perc, 0x01);
+            return bprintf("%c  %s%3d%%  %c", 0x04, map[i].symbol, perc, 0x01);
         }
         else if (perc <= battery_low) {
-            return bprintf("%c%s%3d%%%c", 0x03, map[i].symbol, perc, 0x01);
+            return bprintf("%c  %s%3d%%  %c", 0x03, map[i].symbol, perc, 0x01);
         }
         else {
-            return bprintf("%s%3d%%", map[i].symbol, perc);
+            return bprintf("  %s%3d%%  ", map[i].symbol, perc);
         }
     }
 #elif defined(__OpenBSD__)

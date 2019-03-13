@@ -51,13 +51,13 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ mail_status, " %s ", "/home/wes/Mail/INBOX/new" },
-	{ vpn_status, " %s ", "tun0" },
+	{ mail_status, "    %s  ", "/home/wes/Mail/INBOX/new" },
+	{ vpn_status, "  %s  ", "tun0" },
         { wifi_essid, "%s ", "wlp2s0" }, 
-        { wifi_perc, "%s%% ", "wlp2s0" }, 
-        { temp, " %s\U000000B0 ", "/sys/class/thermal/thermal_zone0/temp"},
-        { battery_perc, " %s ", "BAT1" },
-        { vol_perc, " %s%% ", "/dev/mixer" }, 
-        { datetime, " %s ", "%a %d %b %Y %H:%M" },
-        { username, " %s ", NULL},
+        { wifi_perc, "%s%%  ", "wlp2s0" }, 
+        { temp, "  %s\U000000B0  ", "/sys/class/thermal/thermal_zone0/temp"},
+        { battery_perc,  "%s", "BAT1" },
+        { vol_perc, "  %s%%  ", "/dev/mixer" }, 
+        { datetime, "  %s  ", "%a %d %b %Y %H:%M" },
+        { username, "  %s  ", NULL},
 };
