@@ -16,17 +16,17 @@ const char *
 mail_status(const char *maildir)
 {
 
-	int file_count = 0;
-	DIR * dirp;
-	struct dirent * entry;
+    int file_count = 0;
+    DIR * dirp;
+    struct dirent * entry;
 
-	dirp = opendir(maildir);
-	while ((entry = readdir(dirp)) != NULL) {
-		if (entry->d_type == DT_REG) { /* If the entry is a regular file */
-			 file_count++;
-		}
-	}
-	closedir(dirp);
+    dirp = opendir(maildir);
+    while ((entry = readdir(dirp)) != NULL) {
+        if (entry->d_type == DT_REG) { /* If the entry is a regular file */
+             file_count++;
+        }
+    }
+    closedir(dirp);
 
-  	return bprintf("%s %d", "\U0001F4E7", file_count);
+      return bprintf("%s %d", "\U0001F4E7", file_count);
 }
