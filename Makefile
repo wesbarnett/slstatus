@@ -5,21 +5,9 @@
 include config.mk
 
 REQ = util
-COM =\
-	components/battery\
-	components/cpu\
-	components/datetime\
-	components/disk\
-	components/mail\
-	components/user\
-	components/volume\
-	components/temperature\
-	components/wifi\
-	components/vpn
 
 all: slstatus
 
-$(COM:=.o): config.mk $(REQ:=.h)
 slstatus.o: slstatus.c slstatus.h arg.h config.h config.mk $(REQ:=.h)
 
 .c.o:
@@ -28,17 +16,17 @@ slstatus.o: slstatus.c slstatus.h arg.h config.h config.mk $(REQ:=.h)
 config.h:
 	cp config.def.h $@
 
-slstatus: slstatus.o $(COM:=.o) $(REQ:=.o)
-	$(CC) -o $@ $(LDFLAGS) $(COM:=.o) $(REQ:=.o) slstatus.o $(LDLIBS)
+slstatus: slstatus.o $(REQ:=.o)
+	$(CC) -o $@ $(LDFLAGS) $(REQ:=.o) slstatus.o $(LDLIBS)
 
 clean:
-	rm -f slstatus slstatus.o $(COM:=.o) $(REQ:=.o)
+	rm -f slstatus slstatus.o $(REQ:=.o)
 
 dist:
 	rm -rf "slstatus-$(VERSION)"
 	mkdir -p "slstatus-$(VERSION)/components"
 	cp -R LICENSE Makefile README config.mk config.def.h \
-	      arg.h slstatus.c $(COM:=.c) $(REQ:=.c) $(REQ:=.h) \
+	      arg.h slstatus.c $(REQ:=.c) $(REQ:=.h) \
 	      slstatus.1 "slstatus-$(VERSION)"
 	tar -cf - "slstatus-$(VERSION)" | gzip -c > "slstatus-$(VERSION).tar.gz"
 	rm -rf "slstatus-$(VERSION)"
