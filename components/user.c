@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
-#include <err.h>
 #include <pwd.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -15,10 +15,10 @@ gid(void)
 const char *
 username(void)
 {
-	struct passwd *pw = getpwuid(geteuid());
+	struct passwd *pw;
 
-	if (pw == NULL) {
-		warn("Failed to get username");
+	if (!(pw = getpwuid(geteuid()))) {
+		warn("getpwuid '%d':", geteuid());
 		return NULL;
 	}
 

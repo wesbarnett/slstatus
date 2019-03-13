@@ -1,18 +1,33 @@
 /* See LICENSE file for copyright and license details. */
-#include <sys/sysinfo.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <time.h>
 
 #include "../util.h"
+
+#if defined(CLOCK_BOOTTIME)
+	#define UPTIME_FLAG CLOCK_BOOTTIME
+#elif defined(CLOCK_UPTIME)
+	#define UPTIME_FLAG CLOCK_UPTIME
+#else
+	#define UPTIME_FLAG CLOCK_MONOTONIC
+#endif
 
 const char *
 uptime(void)
 {
-	struct sysinfo info;
-	int h = 0;
-	int m = 0;
+	char warn_buf[256];
+	uintmax_t h, m;
+	struct timespec uptime;
 
-	sysinfo(&info);
-	h = info.uptime / 3600;
-	m = (info.uptime - h * 3600 ) / 60;
+	if (clock_gettime(UPTIME_FLAG, &uptime) < 0) {
+		snprintf(warn_buf, 256, "clock_gettime %d", UPTIME_FLAG);
+		warn(warn_buf);
+		return NULL;
+	}
 
-	return bprintf("%dh %dm", h, m);
+	h = uptime.tv_sec / 3600;
+	m = uptime.tv_sec % 3600 / 60;
+
+	return bprintf("%juh %jum", h, m);
 }

@@ -10,6 +10,7 @@ kernel_release(void)
 	struct utsname udata;
 
 	if (uname(&udata) < 0) {
+		warn("uname:");
 		return NULL;
 	}
 
