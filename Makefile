@@ -10,8 +10,6 @@ COM =\
 	components/cpu\
 	components/datetime\
 	components/disk\
-	components/ip\
-	components/load_avg\
 	components/mail\
 	components/user\
 	components/volume\
