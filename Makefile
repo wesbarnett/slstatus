@@ -13,6 +13,7 @@ COM =\
 	components/mail\
 	components/user\
 	components/volume\
+	components/temperature\
 	components/wifi\
 	components/vpn
 
