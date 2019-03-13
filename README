@@ -1,7 +1,7 @@
 slstatus - suckless status
 ==========================
 
-For of slstatus. I removed all code that I don't use. Thus, this does not include all
+Fork of slstatus. I removed all code that I don't use. Thus, this does not include all
 the features of the upstream version. It does include a couple of functions upstream
 does not (e.g., VPN, mail status).
 
