@@ -49,8 +49,7 @@ static void
 difftimespec(struct timespec *res, struct timespec *a, struct timespec *b)
 {
     res->tv_sec = a->tv_sec - b->tv_sec - (a->tv_nsec < b->tv_nsec);
-    res->tv_nsec = a->tv_nsec - b->tv_nsec +
-                   (a->tv_nsec < b->tv_nsec) * 1E9;
+    res->tv_nsec = a->tv_nsec - b->tv_nsec + (a->tv_nsec < b->tv_nsec) * 1E9;
 }
 
 static void
@@ -171,7 +170,7 @@ temp(const char *file)
     uintmax_t temp;
 
     if (pscanf(file, "%ju", &temp) != 1) {
-            return NULL;
+        return NULL;
     }
 
     return bprintf("%ju", temp / 1000);
@@ -193,46 +192,46 @@ username(void)
 const char *
 vol_perc(const char *card)
 {
-        size_t i;
-        int v, afd, devmask;
-        char *vnames[] = SOUND_DEVICE_NAMES;
+    size_t i;
+    int v, afd, devmask;
+    char *vnames[] = SOUND_DEVICE_NAMES;
 
-        if ((afd = open(card, O_RDONLY | O_NONBLOCK)) < 0) {
-                warn("open '%s':", card);
-                return NULL;
-        }
+    if ((afd = open(card, O_RDONLY | O_NONBLOCK)) < 0) {
+        warn("open '%s':", card);
+        return NULL;
+    }
 
-        if (ioctl(afd, (int)SOUND_MIXER_READ_DEVMASK, &devmask) < 0) {
-                warn("ioctl 'SOUND_MIXER_READ_DEVMASK':");
+    if (ioctl(afd, (int)SOUND_MIXER_READ_DEVMASK, &devmask) < 0) {
+        warn("ioctl 'SOUND_MIXER_READ_DEVMASK':");
+        close(afd);
+         return NULL;
+    }
+    for (i = 0; i < LEN(vnames); i++) {
+        if (devmask & (1 << i) && !strcmp("vol", vnames[i])) {
+            if (ioctl(afd, MIXER_READ(i), &v) < 0) {
+                warn("ioctl 'MIXER_READ(%ld)':", i);
                 close(afd);
                 return NULL;
+            }
         }
-        for (i = 0; i < LEN(vnames); i++) {
-                if (devmask & (1 << i) && !strcmp("vol", vnames[i])) {
-                        if (ioctl(afd, MIXER_READ(i), &v) < 0) {
-                                warn("ioctl 'MIXER_READ(%ld)':", i);
-                                close(afd);
-                                return NULL;
-                        }
-                }
-        }
+    }
 
-        close(afd);
-        if ((v & 0xff) < 1)  {
-                return bprintf("\U0001F507 %3d", v & 0xff);
-        }
-        else if ((v & 0xff) < 10) {
-                return bprintf("\U0001F508 %3d", v & 0xff);
-        }
-        else if ((v & 0xff) < 30) {
-                return bprintf("\U0001F508 %3d", v & 0xff);
-        }
-        else if ((v & 0xff) < 65) {
-                return bprintf("\U0001F509 %3d", v & 0xff);
-        }
-        else {
-                return bprintf("\U0001F50A %3d", v & 0xff);
-        }
+    close(afd);
+    if ((v & 0xff) < 1)  {
+        return bprintf("\U0001F507 %3d", v & 0xff);
+    }
+    else if ((v & 0xff) < 10) {
+        return bprintf("\U0001F508 %3d", v & 0xff);
+    }
+    else if ((v & 0xff) < 30) {
+        return bprintf("\U0001F508 %3d", v & 0xff);
+    }
+    else if ((v & 0xff) < 65) {
+        return bprintf("\U0001F509 %3d", v & 0xff);
+    }
+    else {
+        return bprintf("\U0001F50A %3d", v & 0xff);
+    }
 }
 
 const char *
