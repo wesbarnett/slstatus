@@ -119,3 +119,4 @@
                         return bprintf("\U0001F50A %3d", v & 0xff);
                 }
         }
+#endif
