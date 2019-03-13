@@ -246,13 +246,13 @@ vpn_status(const char *iface)
 
     fp = fopen(path, "r");
     if (fp == NULL) {
-        return "\U0001F513";
+        return "";
     }
     fgets(status, 5, fp);
     fclose(fp);
 
     if(strcmp(status, "down") == 0) {
-        return "\U0001F513";
+        return "";
     }
     else {
         return "\U0001F512";
