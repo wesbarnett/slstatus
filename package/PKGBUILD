@@ -1,5 +1,5 @@
 pkgname=slstatus
-pkgver=ed1342a
+pkgver=d490d1e
 pkgrel=1
 pkgdesc="a suckless and lightweight status monitor for window managers which use WM_NAME as statusbar"
 url="https://github.com/wesbarnett/slstatus"

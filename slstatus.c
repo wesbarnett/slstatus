@@ -367,7 +367,7 @@ wifi_essid(const char *interface)
         return NULL;
     }
 
-    return id;
+    return bprintf("\U0000f1eb %s", id);
 }
 
 int
