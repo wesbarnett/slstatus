@@ -21,7 +21,7 @@ static const struct arg args[] = {
 
     { vpn_status,  "%s ", "tun0" },
     { wifi_essid,  "%s ", "wlp2s0" }, 
-    { wifi_perc,   "(%s%%)", "wlp2s0" }, 
+    { wifi_perc,   "%s%%", "wlp2s0" }, 
     { gap, sep, NULL},
 
     { temp, "%s\U000000B0", "/sys/class/thermal/thermal_zone0/temp"},

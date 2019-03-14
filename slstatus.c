@@ -186,7 +186,7 @@ mail_status(const char *maildir)
     closedir(dirp);
 
     if (file_count > 0) {
-        return bprintf("%s %d", "\U0001F4E7", file_count);
+        return bprintf("%s %d", "\U0000f6ed", file_count);
     } else {
         return "";
     }
