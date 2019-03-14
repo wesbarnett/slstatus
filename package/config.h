@@ -9,7 +9,7 @@ static const char unknown_str[] = "n/a";
 static const int battery_urgent = 10;
 static const int battery_low = 25;
 
-static const char sep[] =  "    ";
+static const char sep[] =  "  ";
 
 /* maximum output string length */
 #define MAXLEN 2048

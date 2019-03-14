@@ -60,9 +60,11 @@ usage(void)
 
 const char * 
 battery_perc(const char *bat) {
+    int charge_full;
     int charge_full_design;
     int charge_now;
     int perc;
+    int perc_design;
     char path[PATH_MAX];
     FILE *fp;
 
@@ -75,6 +77,15 @@ battery_perc(const char *bat) {
     fscanf(fp, "%i", &charge_full_design);
     fclose(fp);
 
+    snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_full");
+    fp = fopen(path, "r");
+    if (fp == NULL) {
+        warn("Failed to open file %s", path);
+        return NULL;
+    }
+    fscanf(fp, "%i", &charge_full);
+    fclose(fp);
+
     snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/", bat, "/charge_now");
     fp = fopen(path, "r");
     if (fp == NULL) {
@@ -84,6 +95,7 @@ battery_perc(const char *bat) {
     fscanf(fp, "%i", &charge_now);
     fclose(fp);
 
+    perc_design = (int)(100.0*((double)charge_now/(double)charge_full_design));
     perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
 
     struct {
@@ -91,7 +103,7 @@ battery_perc(const char *bat) {
         char *symbol;
     } map[] = {
         { "Charging",    "\U0001F50C" },
-        { "Discharging", "\U0001F50B" },
+        { "Discharging", "\U0000f244" },
         { "Full",        "F" },
         { "Unknown",     "?" },
     };
@@ -110,15 +122,31 @@ battery_perc(const char *bat) {
         }
     }
 
-    if (perc <= battery_urgent) {
-        return bprintf("%c%s%3d%%%c", 0x04, map[i].symbol, perc, 0x01);
-    }
-    else if (perc <= battery_low) {
-        return bprintf("%c%s%3d%%%c", 0x03, map[i].symbol, perc, 0x01);
+    if (strcmp("Discharging", state)) {
+        return bprintf("\U0000f1e6%3d%%", perc_design);
     }
     else {
-        return bprintf("%s%3d%%", map[i].symbol, perc);
+        if (perc <= battery_urgent) {
+            return bprintf("%c\U0000f244%3d%%%c", 0x04, perc_design, 0x01);
+        }
+        else if (perc <= battery_low) {
+            return bprintf("%c\U0000f243%3d%%%c", 0x03, perc_design, 0x01);
+        }
+        else if (perc <= 25) {
+            return bprintf("\U0000f243%3d%%", perc_design);
+        }
+        else if (perc <= 50) {
+            return bprintf("\U0000f242%3d%%", perc_design);
+        }
+        else if (perc <= 75) {
+            return bprintf("\U0000f241%3d%%", perc_design);
+        }
+        else if (perc <= 100) {
+            return bprintf("\U0000f240%3d%%", perc_design);
+        }
     }
+
+    return NULL;
 }
 
 const char *
@@ -217,20 +245,20 @@ vol_perc(const char *card)
     }
 
     close(afd);
-    if ((v & 0xff) < 1)  {
-        return bprintf("\U0001F507 %3d", v & 0xff);
+    if ((v & 0xff) <= 1)  {
+        return bprintf("\U0000fa80 %3d", v & 0xff);
     }
-    else if ((v & 0xff) < 10) {
-        return bprintf("\U0001F508 %3d", v & 0xff);
+    else if ((v & 0xff) <= 25) {
+        return bprintf("\U0000fa27 %3d", v & 0xff);
     }
-    else if ((v & 0xff) < 30) {
-        return bprintf("\U0001F508 %3d", v & 0xff);
+    else if ((v & 0xff) <= 50) {
+        return bprintf("\U0000fa7f %3d", v & 0xff);
     }
-    else if ((v & 0xff) < 65) {
-        return bprintf("\U0001F509 %3d", v & 0xff);
+    else if ((v & 0xff) <= 75) {
+        return bprintf("\U0000fa7d %3d", v & 0xff);
     }
     else {
-        return bprintf("\U0001F50A %3d", v & 0xff);
+        return bprintf("\U0000f028 %3d", v & 0xff);
     }
 }
 
@@ -251,10 +279,10 @@ vpn_status(const char *iface)
     fclose(fp);
 
     if(strcmp(status, "down") == 0) {
-        return "";
+        return "\U0000f13e";
     }
     else {
-        return "\U0001F512";
+        return "\U0000f023";
     }
 }
 
