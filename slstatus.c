@@ -96,7 +96,7 @@ battery_perc(const char *bat) {
     fclose(fp);
 
     perc_design = (int)(100.0*((double)charge_now/(double)charge_full_design));
-    perc = (int)(100.0*((double)charge_now/(double)charge_full_design));
+    perc = (int)(100.0*((double)charge_now/(double)charge_full));
 
     struct {
         char *state;
