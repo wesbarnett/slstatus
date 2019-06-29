@@ -20,8 +20,8 @@ static const struct arg args[] = {
     { gap, sep, NULL},
 
     { vpn_status,  "%s ", "tun0" },
-    { wifi_essid,  "%s ", "wlp2s0" }, 
-    { wifi_perc,   "%s%%", "wlp2s0" }, 
+    { wifi_essid,  "%s ", "wlan0" }, 
+    { wifi_perc,   "%s%%", "wlan0" }, 
     { gap, sep, NULL},
 
     { battery_perc,  "%s", "BAT1" },
